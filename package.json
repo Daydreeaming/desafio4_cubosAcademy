@@ -1,0 +1,32 @@
+{
+	"name": "backend",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"create-db-usuarios": "node src/bd-utils/table.js usuarios",
+		"drop-db-usuarios": "node src/bd-utils/dropTable.js usuarios"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"bcryptjs": "^2.4.3",
+		"dotenv": "^8.2.0",
+		"jsonwebtoken": "^8.5.1",
+		"koa": "^2.13.0",
+		"koa-bodyparser": "^4.3.0",
+		"koa-router": "^10.0.0",
+		"node": "^15.2.0",
+		"pg": "^8.5.1"
+	},
+	"devDependencies": {
+		"eslint": "^7.13.0",
+		"eslint-config-airbnb-base": "^14.2.1",
+		"eslint-config-prettier": "^6.15.0",
+		"eslint-plugin-import": "^2.22.1",
+		"eslint-plugin-prettier": "^3.1.4",
+		"prettier": "^2.1.2"
+	}
+}
