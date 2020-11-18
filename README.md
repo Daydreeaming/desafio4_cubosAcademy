@@ -1,5 +1,7 @@
 # Desafio 4 - Cubos Academy
 
+O programa feito consiste em duas tabelas que são criadas para o banco de dados. A tabela de usuários e a tabela. Para a criar e excluir as tabelas, basta seguir os comandos abaixo.
+
 ## Criação das tabelas do banco de dados
 
 - Em um terminal, inicie o server com:
@@ -18,6 +20,7 @@ onde ```nomedatabela``` pode equivaler a;
 | nomedatabela | Banco de dados
 | -------- | -------- |
 | usuarios  | Banco de dados de usuários |
+| clientes | Banco de dados de clientes |
 
 ## Apagar tabela do banco de dados
 
@@ -37,3 +40,10 @@ onde ```nomedatabela``` pode equivaler a;
 | nomedatabela | Banco de dados
 | -------- | -------- |
 | usuarios  | Banco de dados de usuários |
+| clientes | Banco de dados de clientes |
+
+
+
+
+
+
