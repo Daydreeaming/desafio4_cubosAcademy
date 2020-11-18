@@ -1,5 +1,6 @@
 const usuario = require('../controllers/usuario');
 const database = require('../utils/database');
+const response = require('../utils/response');
 
 const criarTabelaUsuarioDB = async () => {
 	const query = `CREATE TABLE IF NOT EXISTS usuarios
@@ -7,22 +8,22 @@ const criarTabelaUsuarioDB = async () => {
 		id serial,
 		nome varchar(255),
 		email varchar(255),
-		senha varchar(255)
+		hash varchar(255)
 	)`;
 
 	return database.query(query);
 };
 
 const adicionarUsuarioAoBD = async (usuario) => {
-	const { nome, email, senha } = usuario;
+	const { nome, email, hash } = usuario;
 
 	const query = {
 		text: `INSERT INTO usuarios
-		(nome, email, senha)
+		(nome, email, hash)
 		values
 		($1, $2, $3) RETURNING *;`,
-		values: [nome, email, senha]
-	}
+		values: [nome, email, hash],
+	};
 
 	const result = await database.query(query);
 
@@ -30,9 +31,8 @@ const adicionarUsuarioAoBD = async (usuario) => {
 };
 
 const obterUsuarioPorEmail = async (email) => {
-
 	if (!email) {
-		return null
+		return null;
 	}
 
 	const query = `SELECT * FROM usuarios WHERE email = $1`;
@@ -43,7 +43,17 @@ const obterUsuarioPorEmail = async (email) => {
 	});
 
 	return result.rows.shift();
-}
+};
+
+const obterBancoDeDadosUsuario = async (ctx) => {
+	const query = `SELECT * FROM usuarios`;
+
+	const result = await database.query({
+		text: query,
+	});
+
+	return response(ctx, 200, result.rows);
+};
 
 const apagarTabela = async (tableName) => {
 	if (tableName) {
@@ -51,4 +61,10 @@ const apagarTabela = async (tableName) => {
 	}
 };
 
-module.exports = { criarTabelaUsuarioDB, adicionarUsuarioAoBD, obterUsuarioPorEmail, apagarTabela }
+module.exports = {
+	criarTabelaUsuarioDB,
+	adicionarUsuarioAoBD,
+	obterUsuarioPorEmail,
+	apagarTabela,
+	obterBancoDeDadosUsuario,
+};

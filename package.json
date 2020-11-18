@@ -6,7 +6,9 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"create-db-usuarios": "node src/bd-utils/table.js usuarios",
-		"drop-db-usuarios": "node src/bd-utils/dropTable.js usuarios"
+		"drop-db-usuarios": "node src/bd-utils/dropTable.js usuarios",
+		"create-db-clientes": "node src/bd-utils/table.js clientes",
+		"drop-db-clientes": "node src/bd-utils/dropTable.js clientes" 
 	},
 	"keywords": [],
 	"author": "",
