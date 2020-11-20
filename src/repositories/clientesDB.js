@@ -4,25 +4,27 @@ const response = require('../utils/response');
 const criarTabelaClientesDB = async () => {
 	const query = `CREATE TABLE IF NOT EXISTS clientes
 	(
-		id serial,
-		nome varchar(255),
-		email varchar(255),
-		cpf varchar(255),
-		celular varchar(255)
+		id SERIAL PRIMARY KEY,
+		usuarioID INTEGER NOT NULL,
+		nome TEXT NOT NULL,
+		email TEXT NOT NULL,
+		cpf TEXT NOT NULL,
+		telefone TEXT NOT NULL,
+		cobrancasRecebidas INT DEFAULT 0
 	)`;
 
 	return database.query(query);
 };
 
 const adicionarClienteAoBD = async (cliente) => {
-	const { nome, email, cpf, celular } = cliente;
+	const { usuarioID, nome, email, cpf, telefone } = cliente;
 
 	const query = {
 		text: `INSERT INTO clientes
-		(nome, email, cpf, celular)
+		(usuarioID, nome, email, cpf, telefone)
 		values
-		($1, $2, $3, $4) RETURNING *;`,
-		values: [nome, email, cpf, celular],
+		($1, $2, $3, $4, $5) RETURNING *;`,
+		values: [usuarioID, nome, email, cpf, telefone],
 	};
 
 	const result = await database.query(query);
@@ -30,7 +32,7 @@ const adicionarClienteAoBD = async (cliente) => {
 	return result.rows.shift();
 };
 
-const verificarCliente = async (email, cpf) => {
+const verificarCliente = async (email = null, cpf = null) => {
 
 	if (!email || !cpf) {
 		return null
@@ -46,6 +48,23 @@ const verificarCliente = async (email, cpf) => {
 	return result.rows.shift();
 }
 
+const obterClientePorID = async (id) => {
+	
+	if (!id) {
+		return null
+	}
+
+	const query = `SELECT * FROM clientes WHERE id = $1`
+	
+	const result = await database.query({
+		text: query,
+		values: [id]
+
+	})
+	
+	return result.rows.shift();
+}
+
 const obterBancoDeDadosClientes = async (ctx) => {
 	const query = `SELECT * FROM clientes`;
 
@@ -55,6 +74,20 @@ const obterBancoDeDadosClientes = async (ctx) => {
 
 	return response(ctx, 200, result.rows);
 };
+
+const paginacaoDeClientes = async (pagina) => {
+
+	const query = `SELECT * FROM clientes
+	LIMIT 10
+	OFFSET($1 - 1) * 10`;
+
+	const result = await database.query({
+		text: query,
+		values: [pagina]
+	});
+
+	return response(ctx, 200, result.rows);
+}
 
 const obterCliente = async (busca) => {
 	if (!busca) {
@@ -97,4 +130,4 @@ const obterCliente = async (busca) => {
 	return result.rows.shift();
 };
 
-module.exports = { criarTabelaClientesDB, adicionarClienteAoBD, verificarCliente, obterBancoDeDadosClientes, obterCliente };
+module.exports = { criarTabelaClientesDB, adicionarClienteAoBD, verificarCliente, obterClientePorID, obterBancoDeDadosClientes, obterCliente };

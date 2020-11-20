@@ -1,36 +1,64 @@
 const response = require('../utils/response');
 const helpers = require('../utils/helpers');
-const clientes = require('../repositories/clientesDB.js');
+const Clientes = require('../repositories/clientesDB.js');
+const usuario = require('../repositories/usuarioDB');
 
 const criarClientes = async (ctx) => {
-	const { nome = null, email = null, cpf = null, celular = null } = ctx.request.body
+	let = {
+		nome = null,
+		email = null,
+		cpf = null,
+		telefone = null,
+	} = ctx.request.body;
 
-	if (!nome || !email || !cpf || !celular ) {
+	const usuarioID = ctx.state.userId;
+	const existenciaUsuario = await usuario.verificarUsuarioPorId(usuarioID)
+
+	if(!existenciaUsuario) {
+		return response(ctx, 400, { message: 'Usuário não existente' }) 
+	}
+
+	if (!nome || !email || !cpf || !telefone) {
 		return response(ctx, 400, { message: 'Pedido mal-formatado' });
 	}
 
-	const existenciaCliente = await clientes.verificarCliente(email, cpf);
+	const existenciaCliente = await Clientes.verificarCliente(email, cpf);
 
 	if (existenciaCliente) {
-		return response(ctx, 400, { message: 'Cliente já existente'});
-	} 
+		return response(ctx, 400, { message: 'Cliente já existente' });
+	}
 
 	try {
 		helpers.validarEmail(email);
-		helpers.validarCPF(cpf)
+		cpf = helpers.validarCPF(cpf);
 	} catch (error) {
 		return response(ctx, 400, { message: error.message });
 	}
 
 	const cliente = {
+		usuarioID,
 		nome,
 		email,
 		cpf,
-		celular,
+		telefone,
+	};
+
+	const result = await Clientes.adicionarClienteAoBD(cliente);
+	return response(ctx, 201, {
+		message: `Cliente de ID ${result.id} criado com sucesso!`,
+	});
+};
+
+const buscarClientes = async (ctx) => {
+	const { nome = null, email = null } = ctx.request.query;
+
+	if (!nome || !email) {
+		return response(ctx, 400, { message: 'Pedido mal-formatado' });
 	}
 
-	const result = await clientes.adicionarClienteAoBD(cliente)
-	return response(ctx, 201, { message: `Cliente de ID ${result.id} criado com sucesso!`});
-}
+	const bancoDeDados = await Clientes.obterBancoDeDadosClientes();
 
-module.exports = { criarClientes }
+	return response(ctx, 400, bancoDeDados);
+};
+
+module.exports = { criarClientes };

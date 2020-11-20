@@ -8,12 +8,17 @@
 		"create-db-usuarios": "node src/bd-utils/table.js usuarios",
 		"drop-db-usuarios": "node src/bd-utils/dropTable.js usuarios",
 		"create-db-clientes": "node src/bd-utils/table.js clientes",
-		"drop-db-clientes": "node src/bd-utils/dropTable.js clientes" 
+		"drop-db-clientes": "node src/bd-utils/dropTable.js clientes",
+		"create-db-cobrancas": "node src/bd-utils/table.js cobrancas",
+		"drop-db-cobrancas": "node src/bd-utils/dropTable.js cobrancas",
+		"create-db-all": "node src/bd-utils/table.js all",
+		"drop-db-all": "node src/bd-utils/dropTable.js all"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"axios": "^0.21.0",
 		"bcryptjs": "^2.4.3",
 		"dotenv": "^8.2.0",
 		"jsonwebtoken": "^8.5.1",
@@ -21,6 +26,8 @@
 		"koa-bodyparser": "^4.3.0",
 		"koa-router": "^10.0.0",
 		"node": "^15.2.0",
+		"nodemailer": "^6.4.16",
+		"pagarme": "^4.13.0",
 		"pg": "^8.5.1"
 	},
 	"devDependencies": {

@@ -6,9 +6,9 @@ const Password = require('../utils/password.js');
 require('dotenv').config();
 
 const autenticar = async (ctx) => {
-	const { email = null, senha = null, nome = null } = ctx.request.body;
+	const { email = null, senha = null } = ctx.request.body;
 
-	if (!email || !senha || !nome) {
+	if (!email || !senha) {
 		return response(ctx, 400, { mensagem: 'Pedido mal formatado' });
 	}
 

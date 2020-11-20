@@ -1,14 +1,13 @@
-const usuario = require('../controllers/usuario');
 const database = require('../utils/database');
 const response = require('../utils/response');
 
 const criarTabelaUsuarioDB = async () => {
 	const query = `CREATE TABLE IF NOT EXISTS usuarios
 	(
-		id serial,
-		nome varchar(255),
-		email varchar(255),
-		hash varchar(255)
+		id SERIAL PRIMARY KEY,
+		nome TEXT NOT NULL,
+		email TEXT NOT NULL,
+		hash TEXT NOT NULL
 	)`;
 
 	return database.query(query);
@@ -45,6 +44,21 @@ const obterUsuarioPorEmail = async (email) => {
 	return result.rows.shift();
 };
 
+const verificarUsuarioPorId = async (id) => {
+	if (!id) {
+		return null;
+	}
+
+	const query = `SELECT * FROM usuarios WHERE id = $1`;
+
+	const result = await database.query({
+		text: query,
+		values: [id],
+	});
+
+	return result.rows.shift();
+}
+
 const obterBancoDeDadosUsuario = async (ctx) => {
 	const query = `SELECT * FROM usuarios`;
 
@@ -65,6 +79,7 @@ module.exports = {
 	criarTabelaUsuarioDB,
 	adicionarUsuarioAoBD,
 	obterUsuarioPorEmail,
+	verificarUsuarioPorId,
 	apagarTabela,
 	obterBancoDeDadosUsuario,
 };
