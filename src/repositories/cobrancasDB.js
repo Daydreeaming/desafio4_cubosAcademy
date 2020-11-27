@@ -8,40 +8,79 @@ const criarTabelaCobrancasDB = async () => {
 		id SERIAL PRIMARY KEY,
 		valor INTEGER NOT NULL,
 		vencimento DATE NOT NULL,
-		clienteId INTEGER NOT NULL,
+		clienteID INTEGER NOT NULL,
 		descricao TEXT NOT NULL,
 		linkDoBoleto TEXT NOT NULL,
 		codigoDeBarras TEXT NOT NULL,
-		dataDePagamento DATE
+		dataDePagamento DATE,
+		status TEXT NOT NULL
 	)`;
-
 	return database.query(query);
 };
 
 const adicionarCobrancasAoBD = async (cobrancas) => {
-	const { clienteId, valor, vencimento, descricao, linkDoBoleto, codigoDeBarras, dataDePagamento} = cobrancas
+	const { clienteID, valor, vencimento, descricao, linkDoBoleto, codigoDeBarras, dataDePagamento, status} = cobrancas
 
 	const query = {
 		text: `INSERT INTO cobrancas
-		(clienteId, valor, vencimento, descricao, linkDoBoleto, codigoDeBarras, dataDePagamento)
+		(clienteID, valor, vencimento, descricao, linkDoBoleto, codigoDeBarras, dataDePagamento, status)
 		values
-		($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
-		values: [clienteId, valor, vencimento, descricao, linkDoBoleto, codigoDeBarras, dataDePagamento],
+		($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;`,
+		values: [clienteID, valor, vencimento, descricao, linkDoBoleto, codigoDeBarras, dataDePagamento, status],
 	};
 
 	const result = await database.query(query);
 
 	return result.rows.shift();
-}
-
-const obterBancoDeDadosCobrancas = async (ctx) => {
-	const query = `SELECT * FROM cobrancas`;
-
-	const result = await database.query({
-		text: query,
-	});
-
-	return response(ctx, 200, result.rows);
 };
 
-module.exports = { criarTabelaCobrancasDB, adicionarCobrancasAoBD, obterBancoDeDadosCobrancas }
+const mostrarCobranca = async (ctx) => {
+	const { cobrancasPorPagina = null, offset = null } = ctx.query;
+
+	const id = ctx.state.userId
+
+	const query = {
+		text: `
+			SELECT clientes.id, cobrancas.clienteID, cobrancas.id, cobrancas.descricao, cobrancas.valor, cobrancas.vencimento, cobrancas.linkDoBoleto
+				FROM clientes
+			INNER JOIN cobrancas ON clientes.id = cobrancas.clienteID
+			WHERE cobrancas.id = $1
+			LIMIT $2
+			OFFSET($3 - 1) * 10
+		`,
+		values: [id, cobrancasPorPagina, offset],
+	};
+
+	const result = await database.query(query);
+
+	return result.rows;
+};
+
+const obterBancoDeDadosCobrancas = async () => {
+	
+	const query ={
+		text: `
+			SELECT clientes.id, cobrancas.clienteID, cobrancas.id, cobrancas.descricao, cobrancas.valor, cobrancas.vencimento, cobrancas.linkDoBoleto, cobrancas.status
+				FROM clientes
+			INNER JOIN cobrancas ON clientes.id = cobrancas.clienteID
+		`
+	}
+
+	const result = await database.query(query);
+
+	return result.rows
+};
+
+const atualizarCobranca = async (id) => {
+	
+	const query = {
+		text: `UPDATE cobrancas
+		set status = 'PAGO'
+		where id = $1`,
+		values: [id]
+	}
+
+	await database.query(query)
+}
+
+module.exports = { criarTabelaCobrancasDB, adicionarCobrancasAoBD, mostrarCobranca, obterBancoDeDadosCobrancas, atualizarCobranca}

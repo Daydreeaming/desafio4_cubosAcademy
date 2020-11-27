@@ -5,9 +5,6 @@ const auth = require('./controllers/auth');
 const usuario = require('./controllers/usuario');
 const clientes = require('./controllers/clientes');
 const cobrancas = require('./controllers/cobrancas')
-const DBUsuarios = require('./repositories/usuarioDB');
-const DBClientes = require('./repositories/clientesDB');
-const DBCobrancas = require('./repositories/cobrancasDB')
 
 // Middlewares //
 
@@ -23,10 +20,13 @@ router.post('/clientes', Session.verify, clientes.criarClientes);
 router.post('/cobrancas', Session.verify, cobrancas.criarCobrancas);
 
 // Rotas Get //
-router.get('/usuarios', DBUsuarios.obterBancoDeDadosUsuario);
-router.get('/clientes', DBClientes.obterBancoDeDadosClientes);
-router.get('/cobrancas', DBCobrancas.obterBancoDeDadosCobrancas);
+router.get('/clientes', Session.verify, usuario.listarClientesDoUsuario);
+router.get('/buscarClienteUsuario', Session.verify, usuario.buscarUmClienteDoUsuario);
+router.get('/cobrancas', Session.verify, cobrancas.listarCobrancaDoCliente);
+router.get('/relatorios', Session.verify, usuario.relatorioDoUsuario);
 
-// https://koajs.com //
+// Rotas Put //
+router.put('/clientes', Session.verify, clientes.editarClientes);
+router.put('/cobrancas', Session.verify, cobrancas.pagarCobranca);
 
 module.exports = router;

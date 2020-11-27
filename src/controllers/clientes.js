@@ -1,6 +1,6 @@
 const response = require('../utils/response');
 const helpers = require('../utils/helpers');
-const Clientes = require('../repositories/clientesDB.js');
+const clientes = require('../repositories/clientesDB.js');
 const usuario = require('../repositories/usuarioDB');
 
 const criarClientes = async (ctx) => {
@@ -12,17 +12,17 @@ const criarClientes = async (ctx) => {
 	} = ctx.request.body;
 
 	const usuarioID = ctx.state.userId;
-	const existenciaUsuario = await usuario.verificarUsuarioPorId(usuarioID)
+	const existenciaUsuario = await usuario.verificarUsuarioPorId(usuarioID);
 
-	if(!existenciaUsuario) {
-		return response(ctx, 400, { message: 'Usuário não existente' }) 
+	if (!existenciaUsuario) {
+		return response(ctx, 400, { message: 'Usuário não existente' });
 	}
 
 	if (!nome || !email || !cpf || !telefone) {
 		return response(ctx, 400, { message: 'Pedido mal-formatado' });
 	}
 
-	const existenciaCliente = await Clientes.verificarCliente(email, cpf);
+	const existenciaCliente = await clientes.verificarCliente(email, cpf);
 
 	if (existenciaCliente) {
 		return response(ctx, 400, { message: 'Cliente já existente' });
@@ -41,24 +41,62 @@ const criarClientes = async (ctx) => {
 		email,
 		cpf,
 		telefone,
+		inadimplente: false,
 	};
 
-	const result = await Clientes.adicionarClienteAoBD(cliente);
+	const result = await clientes.adicionarClienteAoBD(cliente);
 	return response(ctx, 201, {
 		message: `Cliente de ID ${result.id} criado com sucesso!`,
 	});
 };
 
-const buscarClientes = async (ctx) => {
-	const { nome = null, email = null } = ctx.request.query;
+const editarClientes = async (ctx) => {
 
-	if (!nome || !email) {
+	const logadoID = ctx.state.userId
+
+	const idCliente = ctx.request.body.id;
+
+	let = { nome = null, email = null, cpf = null } = ctx.request.body;
+
+	if (!nome || !email || !cpf) {
 		return response(ctx, 400, { message: 'Pedido mal-formatado' });
 	}
 
-	const bancoDeDados = await Clientes.obterBancoDeDadosClientes();
+	try {
+		helpers.validarEmail(email);
+		cpf = helpers.validarCPF(cpf);
+	} catch (error) {
+		return response(ctx, 400, { message: error.message });
+	}
 
-	return response(ctx, 400, bancoDeDados);
+	const clienteAtualizado = {
+		idCliente,
+		nome,
+		email,
+		cpf,
+	};
+
+	const result = await clientes.atualizarCliente(clienteAtualizado);
+
+	if (result === undefined) {
+		return response(ctx, 404, {
+			message: `Não existe com cliente com este id cadastrado`,
+		});
+	}
+
+	if (result.usuarioid != logadoID) {
+		return response(ctx, 400, {
+			message: `Não existe é possível editar cliente que não é seu!`,
+		});
+	}
+
+	return response(ctx, 200, {
+		id: result.idCliente,
+		nome: result.nome,
+		email: result.email,
+		cpf: result.cpf,
+	});
 };
 
-module.exports = { criarClientes };
+
+module.exports = { criarClientes, editarClientes };

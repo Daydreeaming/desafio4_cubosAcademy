@@ -1,5 +1,4 @@
 const database = require('../utils/database');
-const response = require('../utils/response');
 
 const criarTabelaClientesDB = async () => {
 	const query = `CREATE TABLE IF NOT EXISTS clientes
@@ -10,21 +9,25 @@ const criarTabelaClientesDB = async () => {
 		email TEXT NOT NULL,
 		cpf TEXT NOT NULL,
 		telefone TEXT NOT NULL,
-		cobrancasRecebidas INT DEFAULT 0
+		cobrancasFeitas INT DEFAULT 0,
+		cobrancasRecebidas INT DEFAULT 0,
+		estaInadimplente boolean
 	)`;
 
 	return database.query(query);
 };
 
+// Cliente
+
 const adicionarClienteAoBD = async (cliente) => {
-	const { usuarioID, nome, email, cpf, telefone } = cliente;
+	const { usuarioID, nome, email, cpf, telefone, inadimplente } = cliente;
 
 	const query = {
 		text: `INSERT INTO clientes
-		(usuarioID, nome, email, cpf, telefone)
+		(usuarioID, nome, email, cpf, telefone, estaInadimplente)
 		values
-		($1, $2, $3, $4, $5) RETURNING *;`,
-		values: [usuarioID, nome, email, cpf, telefone],
+		($1, $2, $3, $4, $5, $6) RETURNING *;`,
+		values: [usuarioID, nome, email, cpf, telefone, inadimplente],
 	};
 
 	const result = await database.query(query);
@@ -33,101 +36,214 @@ const adicionarClienteAoBD = async (cliente) => {
 };
 
 const verificarCliente = async (email = null, cpf = null) => {
-
 	if (!email || !cpf) {
-		return null
+		return null;
 	}
 
-	const query = `SELECT * FROM clientes WHERE email = $1 or cpf = $2`
+	const cpfTratado = cpf.replace('.',  '').replace('.','').replace('-','')
+
+	const query = `SELECT * FROM clientes WHERE email = $1 or cpf = $2`;
 
 	const result = await database.query({
 		text: query,
-		values: [email, cpf]
-	})
-
-	return result.rows.shift();
-}
-
-const obterClientePorID = async (id) => {
-	
-	if (!id) {
-		return null
-	}
-
-	const query = `SELECT * FROM clientes WHERE id = $1`
-	
-	const result = await database.query({
-		text: query,
-		values: [id]
-
-	})
-	
-	return result.rows.shift();
-}
-
-const obterBancoDeDadosClientes = async (ctx) => {
-	const query = `SELECT * FROM clientes`;
-
-	const result = await database.query({
-		text: query,
+		values: [email, cpfTratado],
 	});
 
-	return response(ctx, 200, result.rows);
+	return result.rows.shift();
 };
 
-const paginacaoDeClientes = async (pagina) => {
+const atualizarCliente = async (cliente) => {
+	const { idCliente, nome, email, cpf } = cliente;
 
-	const query = `SELECT * FROM clientes
-	LIMIT 10
-	OFFSET($1 - 1) * 10`;
+	const query = {
+		text: `UPDATE clientes
+		set nome = $1,
+		email = $2, cpf = $3 where id = $4`,
+		values: [nome, email, cpf, idCliente],
+	};
+
+	await database.query(query);
+
+	const query2 = {
+		text: `SELECT * FROM clientes where id = $1`,
+		values: [idCliente],
+	};
+
+	const result = await database.query(query2);
+
+	return result.rows.shift();
+};
+
+const obterClientePorID = async (id) => {
+	if (!id) {
+		return null;
+	}
+
+	const query = `SELECT * FROM clientes WHERE id = $1`;
 
 	const result = await database.query({
 		text: query,
-		values: [pagina]
+		values: [id],
 	});
 
-	return response(ctx, 200, result.rows);
-}
+	return result.rows.shift();
+};
 
-const obterCliente = async (busca) => {
+const buscarCliente = async (ctx) => {
+	const { busca = null, clientesPorPagina = null, offset = 1 } = ctx.query;
+
 	if (!busca) {
+		return null;
+	}
+
+	if (!clientesPorPagina) {
+		return null;
+	}
+
+	if (!offset) {
 		return null;
 	}
 
 	const reEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-	if (!reEmail.test(String(busca).toLowerCase())) {
-		const query = `SELECT * FROM clientes WHERE email = $1`;
+	if (reEmail.test(String(busca).toLowerCase())) {
+		const query = {
+			text: `
+			SELECT usuarios.id, clientes.usuarioID, clientes.nome, clientes.email, clientes.cobrancasFeitas, clientes.cobrancasRecebidas, clientes.estaInadimplente
+				FROM usuarios
+			INNER JOIN clientes ON usuarios.id = clientes.usuarioID
+				where clientes.email = $1
+			LIMIT $2
+			OFFSET($3 - 1) * 10
+		`,
+			values: [busca, clientesPorPagina, offset],
+		};
 
-		const result = await database.query({
-			text: query,
-			value: [busca],
-		});
-
-		return result.rows.shift();
+		try {
+			const result = await database.query(query);
+			return result.rows.shift();
+		} catch (e) {
+			console.log(e);
+		}
 	}
 
 	const reCpf = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
 
-	if (!reCpf.test(String(busca).toLowerCase())) {
-		const query = `SELECT * FROM clientes WHERE cpf = $1`;
+	if (reCpf.test(String(busca).toLowerCase())) {
+		const query = {
+			text: `
+			SELECT usuarios.id, clientes.usuarioID, clientes.nome, clientes.email, clientes.cpf, clientes.cobrancasFeitas, clientes.cobrancasRecebidas, clientes.estaInadimplente
+				FROM usuarios
+			INNER JOIN clientes ON usuarios.id = clientes.usuarioID
+				where clientes.cpf = $1
+			LIMIT $2
+			OFFSET($3 - 1) * 10
+		`,
+			values: [busca, clientesPorPagina, offset],
+		};
 
-		const result = await database.query({
-			text: query,
-			value: [busca],
-		});
-
-		return result.rows.shift();
+		try {
+			const result = await database.query(query);
+			return result.rows.shift();
+		} catch (e) {
+			console.log(e);
+		}
 	}
 
-	const query = `SELECT * FROM clientes WHERE nome = $1`;
+	const buscaTratada = busca.replace(/[20%]/, ' ');
+	if (buscaTratada) {
+		const query = {
+			text: `
+				SELECT usuarios.id, clientes.usuarioID, clientes.nome, clientes.email, clientes.cobrancasFeitas, clientes.cobrancasRecebidas, clientes.estaInadimplente
+					FROM usuarios
+				INNER JOIN clientes ON usuarios.id = clientes.usuarioID
+					where clientes.nome = $1
+				LIMIT $2
+				OFFSET($3 - 1) * 10
+			`,
+			values: [buscaTratada, clientesPorPagina, offset],
+		};
 
-	const result = await database.query({
-		text: query,
-		values: [busca],
-	});
-
-	return result.rows.shift();
+		try {
+			const result = await database.query(query);
+			return result.rows;
+		} catch (e) {
+			console.log(e);
+		}
+	}
 };
 
-module.exports = { criarTabelaClientesDB, adicionarClienteAoBD, verificarCliente, obterClientePorID, obterBancoDeDadosClientes, obterCliente };
+// Obter do banco de dados
+
+const obterBancoDeDadosClientes = async () => {
+	const query = {
+		text: `
+			SELECT usuarios.id, clientes.usuarioID, clientes.nome, clientes.email, clientes.cobrancasFeitas, clientes.cobrancasRecebidas, clientes.estaInadimplente
+				FROM usuarios
+			INNER JOIN clientes ON usuarios.id = clientes.usuarioID
+		`,
+	};
+
+	const result = await database.query(query);
+
+	return result.rows;
+};
+
+const mostrarClientes = async (ctx) => {
+	const { clientesPorPagina = null, offset = null } = ctx.query;
+
+	const query = {
+		text: `
+			SELECT usuarios.id, clientes.usuarioID, clientes.nome, clientes.email, clientes.cobrancasFeitas, clientes.cobrancasRecebidas, clientes.estaInadimplente
+				FROM usuarios
+			INNER JOIN clientes ON usuarios.id = clientes.usuarioID
+			LIMIT $1
+			OFFSET $2 * 10
+		`,
+		values: [clientesPorPagina, offset],
+	};
+
+	// OFFSET $2 é o valor mandado pelo frontqqq
+
+	const result = await database.query(query);
+
+	return [{
+		paginaAtual: Math.floor(offset/clientesPorPagina) + 1,
+		totalDePaginas: Math.ceil(result.rows.length/clientesPorPagina)
+	}];
+};
+
+const atualizarCobrancasFeitasDoCliente = async (id) => {
+	const query = {
+		text: `UPDATE clientes
+		set cobrancasFeitas = cobrancasFeitas + 1
+		where id = $1`,
+		values: [id],
+	};
+
+	await database.query(query);
+};
+
+const atualizarCobrancasRecebidasDoCliente = async (id) => {
+	const query = {
+		text: `UPDATE clientes
+		set cobrancasRecebidas = cobrancasRecebidas + 1
+		where id = $1`,
+		values: [id],
+	};
+
+	await database.query(query);
+}
+
+module.exports = {
+	criarTabelaClientesDB,
+	adicionarClienteAoBD,
+	verificarCliente,
+	atualizarCliente,
+	obterClientePorID,
+	buscarCliente,
+	obterBancoDeDadosClientes,
+	mostrarClientes,
+	atualizarCobrancasFeitasDoCliente,
+	atualizarCobrancasRecebidasDoCliente
+};

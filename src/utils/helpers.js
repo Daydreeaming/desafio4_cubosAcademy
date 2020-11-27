@@ -39,7 +39,6 @@ const validarCPF = (cpf) => {
 	if (rev == 10 || rev == 11) rev = 0;
 	if (rev != parseInt(cpf.charAt(10))) throw new Error('Cpf inválido');
 
-	console.log(cpf)
 	return cpf
 };
 
