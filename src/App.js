@@ -1,25 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
+import Login from './paginas/login'
+import Cadastro from './paginas/cadastro'
+import Home from './paginas/home'
+import AdicionarCliente from './paginas/adicionarCliente'
+import EditarCliente from './paginas/editarCliente'
+import {BrowserRouter as Router} from 'react-router-dom';
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+			<main>
+				<Router>
+					<EditarCliente/>
+				</Router>
+			</main>
+
+			// Fluxo
+			// 1 - <Login></Login>
+			// 2 - <Cadastro></Cadastro>
+			// 3 - <Home/>
+			// 4 - <criarCobrança/>
+			// 5 - <Cobranças/>
+			// 6 - <criarCliente>
+			// 7 - <clientes/>
+			// 8 - <editarCliente/>
+
+			/* Login > If login verdade pagina home se não Cadastro */
+	);
 }
 
 export default App;

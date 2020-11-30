@@ -1,0 +1,92 @@
+
+.avatar_img {
+	padding: 32px 54px 0 1272px;
+}
+
+.add_client{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding-top: 16px;
+	padding-left: 72px;
+
+}
+
+.add_client > span {
+	align-self: flex-start;
+	margin-bottom: 24px;
+	font-size: 24px;
+}
+
+.add_client input {
+	border: 1px solid #374952;
+	box-sizing: border-box;
+	border-radius: 8px;
+}
+
+.form_client {
+	background-color: #ffffff;
+	border-radius: 16px;
+	font-weight: 600;
+}
+
+.fill_form {
+	padding: 63px 223px 0 223px;
+}
+
+.field_client {
+	display: flex;
+	flex-direction: column;
+	padding-bottom:32px
+}
+
+.field_client span {
+	margin-bottom: 8px;
+}
+
+.field_client input {
+	height: 40px;
+}
+
+.cpf_tel{
+	display: flex;
+	flex-direction: row;
+	padding-bottom: 64px;
+}
+
+.cpf_tel input {
+	width: 100%;
+}
+
+.cpf_tel .field_client:first-child{
+	padding-bottom: 0;
+	padding-right: 16px;
+}
+
+.cpf_tel .field_client:last-child{
+	padding-bottom: 0;
+	padding-left: 0;
+}
+
+.buttons_form{
+	padding-bottom: 67px;
+	font-size: 14px;
+}
+
+.button_form1{
+	margin-right: 16px;
+	border: 1.5px solid #DA0175;
+	box-sizing: border-box;
+	border-radius: 20px;
+	padding: 11px 60px;
+	color: #DA0175
+}
+
+.button_form2{
+	background: rgba(218, 1, 117, 0.35);
+    border-radius: 20px;
+    padding: 11px 60px;
+    color: #f7f7f7;
+    font-weight: bold;
+}
