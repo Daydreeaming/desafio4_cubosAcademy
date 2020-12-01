@@ -1,38 +1,77 @@
-import './style.css';
-import logoCubos from '../../imagens/logoCubos.svg'
-import olhoAberto from '../../imagens/olhoAberto.svg'
-import {Link} from 'react-router-dom'
+import "./style.css";
+import logoCubos from "../../imagens/logoCubos.svg";
+import olhoAberto from "../../imagens/olhoAberto.svg";
+import { Link, useHistory } from "react-router-dom";
+import { useState } from "react";
+import AuthServices from "../../services/auth";
 
 function Login() {
-	return (
-			<div className="box">
-				<div className="box_login">
-					<img src={logoCubos}/>
+  const [username, setUsername] = useState("zdrgod@gmail.com");
+  const [password, setPassword] = useState("admina");
+  const navigation = useHistory();
 
-					<div className="login">
-						<form>
-							<div className="field">
-								<span>E-mail</span>
-								<input type="email" placeHolder="exemplo@gmail.com"></input>
-							</div>
+  async function login(login, password) {
+    try {
+      const resp = await AuthServices.login(login, password);
+      navigation.push("/dashboard");
+      console.log(resp);
+    } catch (error) {
+      alert(error);
+    }
+  }
 
-							<div className="field">
-								<span>Senha</span>
-								<div>
-									<input type="password"/>
-									<button> <img src={olhoAberto}/></button>
-								</div>
-							</div>
-						</form>
-						<Link className="password" to="#">Esqueci minha senha</Link>
-					</div>
+  return (
+    <div className="box">
+      <div className="box_login">
+        <img src={logoCubos} />
 
-					<Link to="#" className="login_button">Entrar</Link>
-				</div>
+        <div className="login">
+          <form onSubmit={() => login(username, password)}>
+            <div className="field">
+              <span>E-mail</span>
+              <input
+                value={username}
+                onChange={(text) => setUsername(text.target.value)}
+                type="email"
+                placeholder="exemplo@gmail.com"
+              />
+            </div>
 
-				<span>Não tem uma conta ? <Link to="#">Cadastre-se</Link></span>
-			</div>
-	);
+            <div className="field">
+              <span>Senha</span>
+              <div>
+                <input
+                  value={password}
+                  onChange={(text) => setPassword(text.target.value)}
+                  type="password"
+                />
+                <button>
+                  <img src={olhoAberto} />
+                </button>
+              </div>
+            </div>
+          </form>
+          <Link className="password" to="#">
+            Esqueci minha senha
+          </Link>
+        </div>
+
+        <Link
+          className="login_button"
+          onClick={(e) => {
+            e.preventDefault();
+            login(username, password);
+          }}
+        >
+          Entrar
+        </Link>
+      </div>
+
+      <span>
+        Não tem uma conta ? <Link to="Cadastro">Cadastre-se</Link>
+      </span>
+    </div>
+  );
 }
 
 export default Login;

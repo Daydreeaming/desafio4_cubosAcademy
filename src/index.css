@@ -1,23 +1,24 @@
-
-
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Montserrat', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Montserrat", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
 button {
-	outline: none;
-	border: none;
-	background: none;
+  outline: none;
+  border: none;
+  background: none;
 }
 
 a {
-	text-decoration: none;
+  text-decoration: none;
+}
+input {
+  outline: none;
 }

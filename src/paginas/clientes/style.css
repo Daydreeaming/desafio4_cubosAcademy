@@ -1,0 +1,71 @@
+.client_body{
+	margin: 65px 70px 71px 72px;
+}
+
+.client_search_add{
+	display: flex;
+	justify-content: space-between;
+}
+
+.button_client{
+	border: 1.5px solid #DA0175;
+	box-sizing: border-box;
+	border-radius: 20px;
+	padding: 11px 60px;
+	color: #DA0175;
+	font-weight: 600;
+}
+
+.client_search_add input{
+	padding: 12px 69px 12px 24px;
+	border: 1px solid #374952;
+	box-sizing: border-box;
+	border-radius: 8px;
+	width: 432px;
+	margin-bottom: 56px;
+}
+
+.all_clients {
+	display: flex;
+	flex-direction: column;
+}
+
+.table_informations_clients{
+	display: flex;
+	justify-content: space-between;
+	padding: 6px 0px 6px 24px;
+}
+
+.tr_contains{
+	display: flex;
+	flex-direction: row;
+	padding-top: 16px;
+	padding-left:24px;
+	background: #FFFFFF;
+	border-radius: 8px;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.client_info{
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	width: 161px;
+}
+
+tr > td, tr > th {
+	flex-grow: 1;
+}
+
+.name_client {
+	padding-bottom: 16px;
+}
+
+.info_email{
+	padding-bottom: 9px;
+}
+
+.info_phone{
+	padding-bottom: 16px;
+}

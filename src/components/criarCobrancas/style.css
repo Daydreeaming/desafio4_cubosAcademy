@@ -2,59 +2,78 @@
 	padding: 32px 54px 0 1272px;
 }
 
-.add_client{
+.add_charges{
 	display: flex;
 	flex-direction: column;
 	padding-top: 16px;
 	padding-left: 72px;
 }
 
-.add_client > span {
+.add_charges > span {
 	align-self: flex-start;
 	margin-bottom: 24px;
 	font-size: 24px;
 }
 
-.add_client input {
+.add_charges input {
 	border: 1px solid #374952;
 	box-sizing: border-box;
 	border-radius: 8px;
 	width: 512px;
 }
 
-.form_client {
+.add_charges select {
+	border: 1px solid #374952;
+	box-sizing: border-box;
+	border-radius: 8px;
+	padding: 12px 0 13px 24px;
+	width: 512px;
+}
+
+.form_charges {
 	background-color: #ffffff;
 	border-radius: 16px;
+	width: 958px;
 }
 
-.field_client {
-	padding-bottom:32px
+.fill_form {
+	display: flex;
+	flex-direction: column;
+	padding: 63px 223px 0px 223px;
+	max-width: 512px;
 }
 
-.field_client span {
+.field_charges {
+	display: flex;
+	flex-direction: column;
+	padding-bottom:32px;
+}
+
+.field_charges span {
+	color: #374952;
 	margin-bottom: 8px;
 }
 
-.field_client input {
-	height: 40px;
+.field_charges input {
+	padding: 12px 0px 13px 24px;
 }
 
-.cpf_tel{
+.valor_vencimento{
 	display: flex;
 	flex-direction: row;
 	padding-bottom: 64px;
 }
 
-.cpf_tel input {
+.valor_vencimento input {
 	width: 247px;
 }
 
-.cpf_tel .field_client:first-child{
+.valor_vencimento .field_charges:first-child{
 	padding-bottom: 0;
 	padding-right: 16px;
 }
 
-.cpf_tel .field_client:last-child{
+.valor_vencimento .field_charges:last-child{
 	padding-bottom: 0;
 	padding-left: 0;
 }
@@ -62,6 +81,7 @@
 .buttons_form{
 	padding-bottom: 67px;
 	font-size: 14px;
+	align-self: flex-end;
 }
 
 .button_form1{

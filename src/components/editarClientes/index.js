@@ -34,7 +34,7 @@ function Cliente() {
 
 							<div className="buttons_form">
 								<Link to="#" className="button_form1">Cancelar</Link>	
-								<Link to="#" className="button_form2">Adicionar Cliente</Link>
+								<Link to="#" className="button_form2">Salvar Alterações</Link>
 							</div>
 						</div>
 				</form>

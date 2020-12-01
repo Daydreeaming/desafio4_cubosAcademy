@@ -1,0 +1,58 @@
+.box_billing{
+	display: flex;
+	flex-direction: column;
+	margin-top:64px;
+	margin-right: 70px;
+	margin-left: 72px
+}
+
+.box_billing input {
+	border: 1px solid #374952;
+	align-self: flex-end;
+	box-sizing: border-box;
+	border-radius: 8px;
+	margin-bottom: 56px;
+	padding:12px 69px 12px 24px;
+}
+.all_billings {
+	display: flex;
+	flex-direction: column;
+}
+.table_head{
+	background: #9DBBC3;
+	border-radius: 8px;
+}
+
+.table_informations{
+	display: flex;
+	padding: 6px 0 6px 24px;
+}
+
+.table_body{
+	margin-top: 24px;
+}
+
+.tr_info{
+	display: flex;
+	justify-content: space-between;
+	padding: 6px 40px 6px 24px;
+	background: #FFFFFF;
+	border-radius: 8px;
+	margin-bottom: 16px;
+}
+
+.pagination{
+	display: inline;
+	justify-content: center;
+	align-items: center;
+	padding-top: 41px;
+	align-self: flex-end;
+}
+
+.pagination img:first {
+	display: inline;
+}
+.pagination span{
+	padding-right: 16px;
+	align-self: center;
+}

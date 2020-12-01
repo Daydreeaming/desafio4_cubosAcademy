@@ -1,43 +1,97 @@
-import './style.css';
-import logoCubos from '../../imagens/logoCubos.svg'
-import olhoAberto from '../../imagens/olhoAberto.svg'
-import {Link} from 'react-router-dom'
+import "./style.css";
+import logoCubos from "../../imagens/logoCubos.svg";
+import olhoAberto from "../../imagens/olhoAberto.svg";
+import olhoFechado from "../../imagens/eyes_open.svg";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import AuthServices from "../../services/auth";
+import { useHistory } from "react-router-dom";
 
 function Cadastrar() {
-	return (
-		<div className="box">
-			<div className="box_signUp">
-				
-				<img src={logoCubos}/>
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const navigation = useHistory();
 
-				<div className="signUp">
-						<form>
-							<div className="field">
-									<span>Nome</span>
-									<input type="text"></input>
-							</div>		
+  async function cadastro(nome, email, password) {
+    try {
+      const resp = await AuthServices.cadastro(nome, email, password);
+      navigation.push("/");
+      alert(resp);
+    } catch (error) {
+      alert(error);
+    }
+  }
 
-							<div className="field">
-								<span>E-mail</span>
-								<input type="email" placeHolder="exemplo@gmail.com"></input>
-							</div>
+  return (
+    <div className="box">
+      <div className="box_signUp">
+        <img src={logoCubos} />
 
-							<div className="field">
-								<span>Senha</span>
-								<div>
-									<input type="password"/>
-									<button> <img src={olhoAberto}/></button>
-								</div>
-							</div>
-						</form>
-					</div>
+        <div className="signUp">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              cadastro(name, email, password);
+            }}
+          >
+            <div className="field">
+              <span>Nome</span>
+              <input
+                value={name}
+                onChange={(text) => setName(text.target.value)}
+                type="text"
+              />
+            </div>
 
-					<Link to="#" className="login_button">Criar Conta</Link>
-			</div>
+            <div className="field">
+              <span>E-mail</span>
+              <input
+                value={email}
+                onChange={(text) => setEmail(text.target.value)}
+                type="email"
+                placeHolder="exemplo@gmail.com"
+              />
+            </div>
 
-			<span>Já possui uma conta? <Link to="#">Acesse agora</Link></span>
-		</div>
-	);
+            <div className="field">
+              <span>Senha</span>
+              <div>
+                <input
+                  value={password}
+                  onChange={(text) => setPassword(text.target.value)}
+                  type={showPassword ? "text" : "password"}
+                />
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowPassword((oldValue) => !oldValue);
+                  }}
+                >
+                  <img src={showPassword ? olhoFechado : olhoAberto} />
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <Link
+          to="#"
+          className="login_button"
+          onClick={(e) => {
+            e.preventDefault();
+            cadastro(name, email, password);
+          }}
+          children="Criar Conta"
+        />
+      </div>
+
+      <span>
+        Já possui uma conta? <Link to="/">Acesse agora</Link>
+      </span>
+    </div>
+  );
 }
 
 export default Cadastrar;

@@ -31,10 +31,6 @@
 	font-weight: 600;
 }
 
-.fill_form {
-	padding: 63px 223px 0 223px;
-}
-
 .field_client {
 	display: flex;
 	flex-direction: column;
