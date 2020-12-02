@@ -9,19 +9,19 @@ const criarUsuario = async (ctx) => {
 	const hash = ctx.state.hash;
 
 	if (!nome || !email || !hash) {
-		return response(ctx, 400, { message: 'Pedido mal-formatado' });
+		return response(ctx, 400, { mensagem: 'Pedido mal-formatado' });
 	}
 
 	const existenciaUsuario = await usuarios.obterUsuarioPorEmail(email);
 
 	if (existenciaUsuario) {
-		return response(ctx, 400, { message: 'Usuário já existente' });
+		return response(ctx, 400, { mensagem: 'Usuário já existente' });
 	}
 
 	try {
 		helpers.validarEmail(email);
 	} catch (error) {
-		return response(ctx, 400, { message: error.message });
+		return response(ctx, 400, { mensagem: error.mensagem });
 	}
 
 	const usuario = {
@@ -32,7 +32,7 @@ const criarUsuario = async (ctx) => {
 
 	const result = await usuarios.adicionarUsuarioAoBD(usuario);
 	return response(ctx, 201, {
-		message: `Usuário de ID ${result.id} criado com sucesso!`,
+		mensagem: `Usuário de ID ${result.id} criado com sucesso!`,
 	});
 };
 
@@ -56,7 +56,7 @@ const buscarUmClienteDoUsuario = async (ctx) => {
 
 	if (result === undefined) {
 		return response(ctx, 404, {
-			message: `Você não tem este cliente cadastrado`,
+			mensagem: `Você não tem este cliente cadastrado`,
 		});
 	}
 
@@ -71,7 +71,7 @@ const buscarUmClienteDoUsuario = async (ctx) => {
 	}
 
 	return response(ctx, 200, {
-		message: `Não existe este cliente na sua lista`,
+		mensagem: `Não existe este cliente na sua lista`,
 	});
 };
 

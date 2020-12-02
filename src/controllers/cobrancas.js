@@ -18,25 +18,25 @@ const criarCobrancas = async (ctx) => {
 	const logadoID = ctx.state.userId;
 
 	if (!idDoCliente || !descricao || !valor || !vencimento) {
-		return response(ctx, 400, { message: 'Pedido mal-formatado' });
+		return response(ctx, 400, { mensagem: 'Pedido mal-formatado' });
 	}
 
 	const existenciaCliente = await Clientes.obterClientePorID(idDoCliente);
 
 	if (!existenciaCliente) {
-		return response(ctx, 404, { message: 'Cliente não existe' });
+		return response(ctx, 404, { mensagem: 'Cliente não existe' });
 	}
 
 	if (existenciaCliente.usuarioid != logadoID) {
 		return response(ctx, 400, {
-			message: `Não existe é possível criar cobrança de um cliente que não é seu!`,
+			mensagem: `Não existe é possível criar cobrança de um cliente que não é seu!`,
 		});
 	}
 
 	try {
 		helpers.validarData(vencimento);
 	} catch (error) {
-		return response(ctx, 400, { message: error.message });
+		return response(ctx, 400, { mensagem: error.mensagem });
 	}
 
 	const boleto = await pagarme.geracaoBoleto(

@@ -15,24 +15,24 @@ const criarClientes = async (ctx) => {
 	const existenciaUsuario = await usuario.verificarUsuarioPorId(usuarioID);
 
 	if (!existenciaUsuario) {
-		return response(ctx, 400, { message: 'Usuário não existente' });
+		return response(ctx, 400, { mensagem: 'Usuário não existente' });
 	}
 
 	if (!nome || !email || !cpf || !telefone) {
-		return response(ctx, 400, { message: 'Pedido mal-formatado' });
+		return response(ctx, 400, { mensagem: 'Pedido mal-formatado' });
 	}
 
 	const existenciaCliente = await clientes.verificarCliente(email, cpf);
 
 	if (existenciaCliente) {
-		return response(ctx, 400, { message: 'Cliente já existente' });
+		return response(ctx, 400, { mensagem: 'Cliente já existente' });
 	}
 
 	try {
 		helpers.validarEmail(email);
 		cpf = helpers.validarCPF(cpf);
 	} catch (error) {
-		return response(ctx, 400, { message: error.message });
+		return response(ctx, 400, { mensagem: error.mensagem });
 	}
 
 	const cliente = {
@@ -46,7 +46,7 @@ const criarClientes = async (ctx) => {
 
 	const result = await clientes.adicionarClienteAoBD(cliente);
 	return response(ctx, 201, {
-		message: `Cliente de ID ${result.id} criado com sucesso!`,
+		mensagem: `Cliente de ID ${result.id} criado com sucesso!`,
 	});
 };
 
@@ -59,14 +59,14 @@ const editarClientes = async (ctx) => {
 	let = { nome = null, email = null, cpf = null } = ctx.request.body;
 
 	if (!nome || !email || !cpf) {
-		return response(ctx, 400, { message: 'Pedido mal-formatado' });
+		return response(ctx, 400, { mensagem: 'Pedido mal-formatado' });
 	}
 
 	try {
 		helpers.validarEmail(email);
 		cpf = helpers.validarCPF(cpf);
 	} catch (error) {
-		return response(ctx, 400, { message: error.message });
+		return response(ctx, 400, { mensagem: error.mensagem });
 	}
 
 	const clienteAtualizado = {
@@ -80,13 +80,13 @@ const editarClientes = async (ctx) => {
 
 	if (result === undefined) {
 		return response(ctx, 404, {
-			message: `Não existe com cliente com este id cadastrado`,
+			mensagem: `Não existe com cliente com este id cadastrado`,
 		});
 	}
 
 	if (result.usuarioid != logadoID) {
 		return response(ctx, 400, {
-			message: `Não existe é possível editar cliente que não é seu!`,
+			mensagem: `Não existe é possível editar cliente que não é seu!`,
 		});
 	}
 
