@@ -16,6 +16,8 @@ function App() {
         <Route exact path="/" component={Login} />
         <Route exact path="/cadastro" component={Cadastro} />
         <Route exact path="/dashboard" component={Home} />
+        <Route exact path="/dashboard/cobrancas" component={ListaDeCobrancas} />
+        <Route exact path="/dashboard/clientes" component={Clientes} />
       </Router>
     </main>
 

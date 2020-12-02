@@ -20,4 +20,5 @@ export default {
       return Promise.reject(error.response.data.dados.mensagem);
     }
   },
+  
 };

@@ -6,8 +6,8 @@ import { useState } from "react";
 import AuthServices from "../../services/auth";
 
 function Login() {
-  const [username, setUsername] = useState("zdrgod@gmail.com");
-  const [password, setPassword] = useState("admina");
+  const [username, setUsername] = useState("admin@admin.com");
+  const [password, setPassword] = useState("admin");
   const navigation = useHistory();
 
   async function login(login, password) {

@@ -13,17 +13,17 @@ function NavMenuHome() {
       <ul className="nav_menu">
         <li className="nav_list">
           <img src={home} />
-          <Link to="">HOME</Link>
+          <Link to="/dashboard">HOME</Link>
         </li>
 
         <li className="nav_list">
           <img src={money} />
-          <Link to="">COBRANÇAS</Link>
+          <Link to="/dashboard/cobrancas">COBRANÇAS</Link>
         </li>
 
         <li className="nav_list">
           <img src={clients} />
-          <Link to="" className>
+          <Link to="/dashboard/clientes" className>
             CLIENTES
           </Link>
         </li>
