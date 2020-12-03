@@ -21,7 +21,7 @@ const criarUsuario = async (ctx) => {
 	try {
 		helpers.validarEmail(email);
 	} catch (error) {
-		return response(ctx, 400, { mensagem: error.mensagem });
+		return response(ctx, 400, { mensagem: error.message });
 	}
 
 	const usuario = {
