@@ -2,13 +2,6 @@
 	padding: 32px 54px 0 1272px;
 }
 
-.add_client{
-	display: flex;
-	flex-direction: column;
-	padding-top: 16px;
-	padding-left: 72px;
-}
-
 .add_client > span {
 	align-self: flex-start;
 	margin-bottom: 24px;
@@ -64,6 +57,7 @@
 	font-size: 14px;
 }
 
+
 .button_form1{
 	margin-right: 16px;
 	border: 1.5px solid #DA0175;
@@ -71,6 +65,10 @@
 	border-radius: 20px;
 	padding: 11px 60px;
 	color: #DA0175
+}
+
+.button_form1:hover{
+	background-color: #D8BFCC;
 }
 
 .button_form2{

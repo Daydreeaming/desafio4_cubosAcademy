@@ -1,16 +1,8 @@
-
-.avatar_img {
-	padding: 32px 54px 0 1272px;
-}
-
 .add_client{
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	padding-top: 16px;
-	padding-left: 72px;
-
 }
 
 .add_client > span {

@@ -20,6 +20,7 @@ function Cadastrar() {
       navigation.push("/");
       alert(resp);
     } catch (error) {
+			console.log(error)
       alert(error);
     }
   }
@@ -51,7 +52,7 @@ function Cadastrar() {
                 value={email}
                 onChange={(text) => setEmail(text.target.value)}
                 type="email"
-                placeHolder="exemplo@gmail.com"
+                placeholder="exemplo@gmail.com"
               />
             </div>
 

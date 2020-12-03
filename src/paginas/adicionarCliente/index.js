@@ -1,7 +1,7 @@
 import NavMenuHome from '../../components/menuNavegacao'
 import AdicionarCliente from '../../components/adicionarClientes'
 
-function AdicionarClientes() {
+function CadastroCliente() {
 	return (
 		<div>
 			<div className="box_home">
@@ -17,4 +17,4 @@ function AdicionarClientes() {
 	)
 }
 
-export default AdicionarClientes
+export default CadastroCliente

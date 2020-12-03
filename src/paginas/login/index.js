@@ -1,18 +1,23 @@
 import "./style.css";
 import logoCubos from "../../imagens/logoCubos.svg";
 import olhoAberto from "../../imagens/olhoAberto.svg";
+import olhoFechado from "../../imagens/eyes_open.svg";
 import { Link, useHistory } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import AuthServices from "../../services/auth";
+import { AuthContext } from '../../components/AuthProvider'
 
 function Login() {
   const [username, setUsername] = useState("admin@admin.com");
   const [password, setPassword] = useState("admin");
+  const [showPassword, setShowPassword] = useState(false);
+  const {setToken} = useContext(AuthContext) 
   const navigation = useHistory();
 
   async function login(login, password) {
     try {
-      const resp = await AuthServices.login(login, password);
+	  const resp = await AuthServices.login(login, password);
+	  setToken(resp)
       navigation.push("/dashboard");
       console.log(resp);
     } catch (error) {
@@ -43,10 +48,13 @@ function Login() {
                 <input
                   value={password}
                   onChange={(text) => setPassword(text.target.value)}
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                 />
-                <button>
-                  <img src={olhoAberto} />
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    setShowPassword((oldValue) => !oldValue);
+                  }}>
+                  <img src={showPassword ? olhoAberto : olhoFechado} />
                 </button>
               </div>
             </div>

@@ -23,13 +23,13 @@ function NavMenuHome() {
 
         <li className="nav_list">
           <img src={clients} />
-          <Link to="/dashboard/clientes" className>
+          <Link to="/dashboard/clientes">
             CLIENTES
           </Link>
         </li>
       </ul>
 
-      <Link className="nav_button">Criar cobrança</Link>
+      <Link to="/dashboard/criarCobranca" className="nav_button">Criar cobrança</Link>
     </div>
   );
 }

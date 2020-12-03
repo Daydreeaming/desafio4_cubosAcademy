@@ -44,10 +44,10 @@ function CriarCobrancas() {
               </div>
             </div>
             <div className="buttons_form">
-              <Link to="#" className="button_form1">
+              <Link to="/dashboard" className="button_form1">
                 Cancelar
               </Link>
-              <Link to="#" className="button_form2">
+              <Link to="/dashboard" className="button_form2">
                 Criar cobranças
               </Link>
             </div>

@@ -8,7 +8,7 @@ import editar from "../../imagens/editar.svg";
 import arrow_left from "../../imagens/chevron-left.svg";
 import arrow_right from "../../imagens/chevron-right.svg";
 
-function Clientes() {
+function ListaDeClientes() {
   return (
     <div>
       <div className="box_home">
@@ -20,7 +20,7 @@ function Clientes() {
           <SaldoNaConta></SaldoNaConta>
           <div className="client_body">
             <div className="client_search_add">
-              <Link to="#">
+              <Link to="/dashboard/cadastrarCliente">
                 <button className="button_client">Adicionar Cliente</button>
               </Link>
               <input
@@ -29,7 +29,39 @@ function Clientes() {
               ></input>
             </div>
 
-            <table className="all_clients">
+            <ul className="table_header_clients">
+              <li>Cliente</li>
+              <li>Cobranças Feitas</li>
+              <li>Cobranças Recebidas</li>
+              <li>Status</li>
+            </ul>
+
+            <ul className="table_item_clients">
+              <li>
+                <div>
+					<span>Nome e Sobrenome da Cliente</span>
+					<span><img src={carta} />email@email.com</span>
+					<span><img src={phone} />(DDD) 00000-0000</span>
+				</div>
+              </li>
+              <li>Pagamento referente ao...</li>
+              <li>R$ 00.000.00</li>
+              <div className="isPaid">
+                <label className="switch">
+                  <input type="checkbox" />
+                  <span className="slider round"></span>
+                </label>
+                <li>Pendente</li>
+              </div>
+              <li><img src={editar}></img></li>
+              <li>
+                <button>
+                  <img />
+                </button>
+              </li>
+            </ul>
+			
+            {/* <table className="all_clients">
               <thead className="table_head">
                 <tr className="table_informations_clients">
                   <th>Cliente</th>
@@ -76,7 +108,7 @@ function Clientes() {
                   </td>
                 </tr>
               </tbody>
-            </table>
+            </table> */}
 
             <div className="pagination">
               <img src={arrow_left} />
@@ -99,4 +131,4 @@ function Clientes() {
   );
 }
 
-export default Clientes;
+export default ListaDeClientes;
