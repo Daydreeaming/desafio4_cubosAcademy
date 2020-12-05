@@ -7,8 +7,27 @@ import phone from "../../imagens/phone.svg";
 import editar from "../../imagens/editar.svg";
 import arrow_left from "../../imagens/chevron-left.svg";
 import arrow_right from "../../imagens/chevron-right.svg";
+import AuthServices from "../../services/auth";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../../components/AuthProvider";
 
 function ListaDeClientes() {
+  const [clientes, setClientes] = useState([]);
+  const { token } = useContext(AuthContext);
+
+  React.useEffect(() => {
+    getClientes(token);
+  }, []);
+
+  async function getClientes(token) {
+    try {
+      const resp = await AuthServices.getClientes(token);
+      setClientes(resp.dados.clientes);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div>
       <div className="box_home">
@@ -17,7 +36,7 @@ function ListaDeClientes() {
         </div>
 
         <div className="box_home_right">
-          <SaldoNaConta></SaldoNaConta>
+          <SaldoNaConta />
           <div className="client_body">
             <div className="client_search_add">
               <Link to="/dashboard/cadastrarCliente">
@@ -36,79 +55,41 @@ function ListaDeClientes() {
               <li>Status</li>
             </ul>
 
-            <ul className="table_item_clients">
-              <li>
-                <div>
-					<span>Nome e Sobrenome da Cliente</span>
-					<span><img src={carta} />email@email.com</span>
-					<span><img src={phone} />(DDD) 00000-0000</span>
-				</div>
-              </li>
-              <li>Pagamento referente ao...</li>
-              <li>R$ 00.000.00</li>
-              <div className="isPaid">
-                <label className="switch">
-                  <input type="checkbox" />
-                  <span className="slider round"></span>
-                </label>
-                <li>Pendente</li>
-              </div>
-              <li><img src={editar}></img></li>
-              <li>
-                <button>
-                  <img />
-                </button>
-              </li>
-            </ul>
-			
-            {/* <table className="all_clients">
-              <thead className="table_head">
-                <tr className="table_informations_clients">
-                  <th>Cliente</th>
-                  <th>Cobranças Feitas</th>
-                  <th>Cobranças Recebidas</th>
-                  <th>Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-
-              <tbody className="table_body">
-                <tr className="tr_contains">
-                  <td className="client_info">
-                    <span className="name_client">
-                      Nome e Sobrenome da Cliente
-                    </span>
-                    <div className="info_email">
-                      <img src={carta} />
-                      <span>email@email.com</span>
-                    </div>
-
-                    <div className="info_phone">
-                      <img src={phone} />
-                      <span>(DDD) 00000-0000</span>
-                    </div>
-                  </td>
-
-                  <td>
-                    <span className="amizade">R$ 00.000,00</span>
-                  </td>
-
-                  <td>
-                    <span className="amizade">R$ 00.000,00</span>
-                  </td>
-
-                  <td>
-                    <span className="amizade">Em dia</span>
-                  </td>
-
-                  <td>
-                    <button>
-                      <img src={editar} />
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table> */}
+            {clientes.length === 0 && <span>Não existe clientes</span>}
+            {clientes.map((cliente) => (
+              <ul className="table_item_clients">
+                <li>
+                  <span>{cliente.nome}</span>
+                  <span>
+                    <img src={carta} />
+                    {cliente.email}
+                  </span>
+                  <span>
+                    <img src={phone} />
+                    (DDD) 00000-0000
+                  </span>
+                </li>
+                <li>R${cliente.cobrancasfeitas}</li>
+                <li>R${cliente.cobrancasrecebidas}</li>
+                <div className="isPaid">
+                  <li>
+                    {clientes.estaInadimplente === true ? (
+                      <span style={{ color: "red" }}>Inadimplente</span>
+                    ) : (
+                      <span style={{ color: "green" }}>Em dia</span>
+                    )}
+                  </li>
+                </div>
+                <li>
+                  <img src={editar}></img>
+                </li>
+                <li>
+                  <button>
+                    <img />
+                  </button>
+                </li>
+              </ul>
+            ))}
 
             <div className="pagination">
               <img src={arrow_left} />

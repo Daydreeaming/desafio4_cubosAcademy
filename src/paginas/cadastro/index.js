@@ -78,7 +78,7 @@ function Cadastrar() {
         </div>
 
         <Link
-          to="#"
+          to="/login"
           className="login_button"
           onClick={(e) => {
             e.preventDefault();
@@ -89,7 +89,7 @@ function Cadastrar() {
       </div>
 
       <span>
-        Já possui uma conta? <Link to="/">Acesse agora</Link>
+		Já possui uma conta? <Link to="/login">Acesse agora</Link>
       </span>
     </div>
   );

@@ -19,7 +19,6 @@ function Login() {
 	  const resp = await AuthServices.login(login, password);
 	  setToken(resp)
       navigation.push("/dashboard");
-      console.log(resp);
     } catch (error) {
       alert(error);
     }

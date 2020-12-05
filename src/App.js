@@ -16,7 +16,7 @@ function App() {
     <main>
 		<AuthProvider>
 			<Router>
-				<Route exact path="/" component={Login} />
+				<Route exact path="/login" component={Login} />
 				<Route exact path="/cadastro" component={Cadastro} />
 				<PrivateRoute exact path="/dashboard" component={Home} />
 				<PrivateRoute exact path="/dashboard/clientes" component={ListaDeClientes} />

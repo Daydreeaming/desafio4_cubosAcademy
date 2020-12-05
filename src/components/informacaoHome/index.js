@@ -2,7 +2,9 @@ import "./style.css";
 import users from "../../imagens/users.svg";
 import money from "../../imagens/money.svg";
 
-function InformacaoHome() {
+function InformacaoHome(props) {
+  const { data } = props;
+
   return (
     <div className="main_menu_home">
       <ul className="main_menu">
@@ -21,13 +23,17 @@ function InformacaoHome() {
           <div className="containers_body">
             <div className="style_containers_green">
               <span className="span_container1">Em dia</span>
-              <span className="span_container2">0</span>
+              <span className="span_container2">
+                {data?.qtdClientesAdimplentes}
+              </span>
             </div>
 
             <div className="style_containers_red">
               <span className="span_container1">Inadimplentes</span>
 
-              <span className="span_container2">0</span>
+              <span className="span_container2">
+                {data?.qtdClientesInadimplentes}
+              </span>
             </div>
           </div>
         </div>
@@ -42,19 +48,23 @@ function InformacaoHome() {
             <div className="style_containers_blue">
               <span className="span_container1">Em dia</span>
 
-              <span className="span_container2">0</span>
+              <span className="span_container2">
+                {data?.qtdCobrancasPrevistas}
+              </span>
             </div>
 
             <div className="style_containers_red">
               <span className="span_container1">Vencidas</span>
 
-              <span className="span_container2">0</span>
+              <span className="span_container2">
+                {data?.qtdCobrancasVencidas}
+              </span>
             </div>
 
             <div className="style_containers_green">
               <span className="span_container1">Pagas</span>
 
-              <span className="span_container2">0</span>
+              <span className="span_container2">{data?.qtdCobrancasPagas}</span>
             </div>
           </div>
         </div>
