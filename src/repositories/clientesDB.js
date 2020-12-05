@@ -40,7 +40,7 @@ const verificarCliente = async (email = null, cpf = null) => {
 		return null;
 	}
 
-	const cpfTratado = cpf.replace('.',  '').replace('.','').replace('-','')
+	const cpfTratado = cpf.replace('.', '').replace('.', '').replace('-', '');
 
 	const query = `SELECT * FROM clientes WHERE email = $1 or cpf = $2`;
 
@@ -198,19 +198,20 @@ const mostrarClientes = async (ctx) => {
 				FROM usuarios
 			INNER JOIN clientes ON usuarios.id = clientes.usuarioID
 			LIMIT $1
-			OFFSET $2 * 10
+			OFFSET ($2 - 1) * 10
 		`,
 		values: [clientesPorPagina, offset],
 	};
 
-	// OFFSET $2 é o valor mandado pelo frontqqq
+	// OFFSET $2 é o valor mandado pelo front
 
 	const result = await database.query(query);
 
-	return [{
-		paginaAtual: Math.floor(offset/clientesPorPagina) + 1,
-		totalDePaginas: Math.ceil(result.rows.length/clientesPorPagina)
-	}];
+	return {
+		dados: result.rows,
+		paginaAtual: Math.floor(offset / clientesPorPagina) + 1,
+		totalDePaginas: Math.ceil(result.rows.length / clientesPorPagina),
+	};
 };
 
 const atualizarCobrancasFeitasDoCliente = async (id) => {
@@ -233,7 +234,7 @@ const atualizarCobrancasRecebidasDoCliente = async (id) => {
 	};
 
 	await database.query(query);
-}
+};
 
 module.exports = {
 	criarTabelaClientesDB,
@@ -245,5 +246,5 @@ module.exports = {
 	obterBancoDeDadosClientes,
 	mostrarClientes,
 	atualizarCobrancasFeitasDoCliente,
-	atualizarCobrancasRecebidasDoCliente
+	atualizarCobrancasRecebidasDoCliente,
 };

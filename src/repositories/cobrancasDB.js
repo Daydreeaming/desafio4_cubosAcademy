@@ -41,7 +41,7 @@ const mostrarCobranca = async (ctx) => {
 
 	const query = {
 		text: `
-			SELECT clientes.id, cobrancas.clienteID, cobrancas.id, cobrancas.descricao, cobrancas.valor, cobrancas.vencimento, cobrancas.linkDoBoleto
+			SELECT clientes.id, cobrancas.clienteID, clientes.nome, cobrancas.id, cobrancas.descricao, cobrancas.valor, cobrancas.vencimento, cobrancas.linkDoBoleto
 				FROM clientes
 			INNER JOIN cobrancas ON clientes.id = cobrancas.clienteID
 			WHERE cobrancas.id = $1
@@ -53,7 +53,11 @@ const mostrarCobranca = async (ctx) => {
 
 	const result = await database.query(query);
 
-	return result.rows;
+	return {
+		dados: result.rows,
+		paginaAtual: Math.floor(offset / cobrancasPorPagina) + 1,
+		totalDePaginas: Math.ceil(result.rows.length / cobrancasPorPagina)
+	}
 };
 
 const obterBancoDeDadosCobrancas = async () => {

@@ -12,7 +12,7 @@ const criarClientes = async (ctx) => {
 	} = ctx.request.body;
 
 	const usuarioID = ctx.state.userId;
-	const existenciaUsuario = await usuario.verificarUsuarioPorId(usuarioID);
+ 	const existenciaUsuario = await usuario.verificarUsuarioPorId(usuarioID);
 
 	if (!existenciaUsuario) {
 		return response(ctx, 400, { mensagem: 'Usuário não existente' });
@@ -43,7 +43,6 @@ const criarClientes = async (ctx) => {
 		telefone,
 		inadimplente: false,
 	};
-
 	const result = await clientes.adicionarClienteAoBD(cliente);
 	return response(ctx, 201, {
 		mensagem: `Cliente de ID ${result.id} criado com sucesso!`,
@@ -51,8 +50,7 @@ const criarClientes = async (ctx) => {
 };
 
 const editarClientes = async (ctx) => {
-
-	const logadoID = ctx.state.userId
+	const logadoID = ctx.state.userId;
 
 	const idCliente = ctx.request.body.id;
 
@@ -97,6 +95,5 @@ const editarClientes = async (ctx) => {
 		cpf: result.cpf,
 	});
 };
-
 
 module.exports = { criarClientes, editarClientes };

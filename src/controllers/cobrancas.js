@@ -5,6 +5,7 @@ const cobrancas = require('../repositories/cobrancasDB');
 const pagarme = require('../utils/pagarme');
 const enviarEmail = require('../utils/email');
 const clientes = require('./clientes');
+const { resumeDrain } = require('../utils/database');
 
 const criarCobrancas = async (ctx) => {
 	const {
@@ -77,12 +78,24 @@ const criarCobrancas = async (ctx) => {
 };
 
 const listarCobrancaDoCliente = async (ctx) => {
+	const logadoID = ctx.state.userId;
 
 	const result = await cobrancas.mostrarCobranca(ctx);
-	return response(ctx, 201, result);
+
+	const filteredResult = result.dados.filter((item) => {
+		return item.clienteid === logadoID
+	})
+
+	const respPages = {
+		cobrancas: filteredResult,
+		paginasTotal: result.totalDePaginas,
+		paginaAtual: result.paginaAtual,
+	}
+
+	return response(ctx, 201, respPages);
 };
 
-const pagarCobranca = async (ctx) => {
+const pagarCobranca = async (ctx) => {''
 
 	const idCobranca = ctx.request.body.id
 
@@ -90,7 +103,6 @@ const pagarCobranca = async (ctx) => {
 	await cobrancas.atualizarCobranca(idCobranca)
 
 	return response(ctx, 200, {  mensagem: "Cobrança paga com sucesso"} )
-
 }
 
 module.exports = { criarCobrancas, listarCobrancaDoCliente, pagarCobranca };

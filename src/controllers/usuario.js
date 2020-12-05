@@ -41,11 +41,18 @@ const listarClientesDoUsuario = async (ctx) => {
 
 	const result = await clientes.mostrarClientes(ctx);
 
-	const filteredResult = result.filter((item) => {
+	const filteredResult = result.dados.filter((item) => {
 		return item.usuarioid === logadoID;
 	});
 
-	return response(ctx, 201, filteredResult);
+	const respPages = { 
+		clientes: filteredResult,
+		paginasTotal: result.totalDePaginas,
+		paginaAtual: result.paginaAtual,
+	}
+	
+
+	return response(ctx, 201, respPages);
 };
 
 const buscarUmClienteDoUsuario = async (ctx) => {
